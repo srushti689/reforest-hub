@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reforestation Platform (Mock Demo)</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; }
+    h2 { color: green; }
+    label { display: block; margin-top: 10px; }
+    input, select, button, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+    button { cursor: pointer; background-color: green; color: white; border: none; }
+    .output { background: #f0f0f0; padding: 10px; margin-top: 10px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+
+  <h1>Reforestation Platform (Mock Demo)</h1>
+
+  <!-- Updated section: Forest Info by Forest Name -->
+  <section>
+    <h2>Check Forest Info</h2>
+    <label for="forestInput">Forest Name:</label>
+    <input type="text" id="forestInput" placeholder="Enter forest name e.g. Sundarbans" />
+    <button onclick="getForestInfo()">Get Forest Info</button>
+    <pre id="forestInfoOutput" class="output"></pre>
+  </section>
+
+  <section>
+    <h2>Forest Stats (India)</h2>
+    <button onclick="getForestStats()">Get Forest Stats</button>
+    <pre id="forestOutput" class="output"></pre>
+  </section>
+
+  <section>
+    <h2>Check Soil Condition by Location</h2>
+    <label for="locationInput">Location:</label>
+    <input type="text" id="locationInput" placeholder="e.g. Madhya Pradesh" />
+    <button onclick="getSoilCondition()">Get Soil Condition</button>
+    <pre id="soilOutput" class="output"></pre>
+  </section>
+
+  <section>
+    <h2>Improvement Tips</h2>
+    <button onclick="getTips()">Show Tips</button>
+    <pre id="tipsOutput" class="output"></pre>
+  </section>
+
+  <section>
+    <h2>Plant Trees (Submit Data)</h2>
+    <label for="plantUser">Username:</label>
+    <input type="text" id="plantUser" placeholder="Your username" />
+
+    <label for="plantTrees">Number of Trees Planted:</label>
+    <input type="number" id="plantTrees" min="1" />
+
+    <label for="plantLocation">Location:</label>
+    <input type="text" id="plantLocation" placeholder="Planting location" />
+
+    <button onclick="submitPlantData()">Submit</button>
+    <pre id="plantOutput" class="output"></pre>
+  </section>
+
+<script>
+  const forests = {
+    "Sundarbans": {
+      location: "West Bengal",
+      varieties_of_trees: ["Goran", "Gewa", "Keora", "Kankra", "Hental"]
+    },
+    "Jim Corbett": {
+      location: "Uttarakhand",
+      varieties_of_trees: ["Sal", "Teak", "Bamboo", "Peepal", "Jamun"]
+    },
+    "Gir": {
+      location: "Gujarat",
+      varieties_of_trees: ["Acacia", "Babul", "Khejri", "Tendu"]
+    },
+    "Silent Valley": {
+      location: "Kerala",
+      varieties_of_trees: ["Teak", "Rosewood", "Ebony", "Indian Laurel"]
+    }
+  };
+
+  const forest_data = {
+    total_forest_area_sq_km: 710000,
+    destroyed_forest_area_sq_km: 15000,
+  };
+
+  const soil_conditions = {
+    "Madhya Pradesh": "Loamy, good for planting",
+    "Chhattisgarh": "Sandy, needs enrichment",
+    "Assam": "Clayey, moisture-retentive",
+  };
+
+  const tips_for_improvement = [
+    "Use organic compost to improve soil fertility",
+    "Plant native tree species for better survival rates",
+    "Implement drip irrigation to conserve water",
+  ];
+
+  function getForestInfo() {
+    const forestName = document.getElementById('forestInput').value.trim();
+    if (!forestName) {
+      alert('Please enter a forest name');
+      return;
+    }
+    const forest = forests[forestName];
+    if (forest) {
+      document.getElementById('forestInfoOutput').textContent = JSON.stringify({
+        forest_name: forestName,
+        location: forest.location,
+        varieties_of_trees: forest.varieties_of_trees
+      }, null, 2);
+    } else {
+      document.getElementById('forestInfoOutput').textContent = JSON.stringify({error: "Forest not found"}, null, 2);
+    }
+  }
+
+  function getForestStats() {
+    document.getElementById('forestOutput').textContent = JSON.stringify(forest_data, null, 2);
+  }
+
+  function getSoilCondition() {
+    const location = document.getElementById('locationInput').value.trim();
+    if (!location) {
+      alert('Please enter a location');
+      return;
+    }
+    const condition = soil_conditions[location];
+    if (condition) {
+      document.getElementById('soilOutput').textContent = JSON.stringify({
+        location,
+        soil_condition: condition
+      }, null, 2);
+    } else {
+      document.getElementById('soilOutput').textContent = JSON.stringify({error: "Location not found"}, null, 2);
+    }
+  }
+
+  function getTips() {
+    document.getElementById('tipsOutput').textContent = "• " + tips_for_improvement.join('\n• ');
+  }
+
+  function submitPlantData() {
+    const username = document.getElementById('plantUser').value.trim();
+    const treesPlanted = parseInt(document.getElementById('plantTrees').value);
+    const location = document.getElementById('plantLocation').value.trim();
+
+    if (!username || !treesPlanted || treesPlanted <= 0 || !location) {
+      alert('Please fill all fields correctly');
+      return;
+    }
+
+    alert(`Data submitted:\nUsername: ${username}\nTrees planted: ${treesPlanted}\nLocation: ${location}`);
+  }
+</script>
+
+</body>
+</html>
